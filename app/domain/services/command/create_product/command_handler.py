@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 from app.domain.model.product import Product
 from app.domain.ports.products_repository import ProductsRepository
-from app.domain.services.command.create_product_command import CreateProductCommand
+from app.domain.services.command.create_product.command import CreateProductCommand
 
 
 async def handle_create_product_command(command: CreateProductCommand,
