@@ -10,7 +10,7 @@ class ProductsRepository(ABC):
         ...
 
     @abstractmethod
-    def update_attributes(self, product_id: str, **kwargs) -> None:
+    async def update_attributes(self, product_id: str, **kwargs) -> None:
         ...
 
     @abstractmethod
@@ -18,5 +18,5 @@ class ProductsRepository(ABC):
         ...
 
     @abstractmethod
-    def delete(self, product_id: str) -> None:
+    async def delete(self, product_id: str) -> None:
         ...

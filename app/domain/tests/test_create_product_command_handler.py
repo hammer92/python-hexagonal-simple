@@ -3,12 +3,12 @@ from unittest import TestCase, mock
 from assertpy import assertpy
 
 from app.domain.ports.products_repository import ProductsRepository
-from app.domain.services.command.create_product_command import CreateProductCommand
-from app.domain.services.command.create_product_command_handler import handle_create_product_command
+from app.domain.services.command.create_product.command import CreateProductCommand
+from app.domain.services.command.create_product.command_handler import handle_create_product_command
 
 
 
-class Test(TestCase):
+class TestCreateProduct(TestCase):
     async def test_handle_create_product_command(self):
         # Arrange
         mock_products_repository = mock.create_autospec(
