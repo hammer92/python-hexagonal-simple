@@ -1,35 +1,39 @@
 import uuid
-from datetime import datetime, timezone
-from unittest import TestCase
+import logging
 from unittest.async_case import IsolatedAsyncioTestCase
 
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.adapters.sql_alchemy.repositories.products_repository import SqlAlchemyProductsRepository, Base
-from app.adapters.sql_alchemy.session import get_session
+from app.adapters.sql_alchemy.repositories.products_repository import SqlAlchemyProductsRepository
 from app.domain.model.product import Product
+
+logger = logging.getLogger(__name__)
+_id = str("b35ef433-351d-4352-b908-3ff5c5675f1a")
 
 class TestSqlAlchemyProductsRepository(IsolatedAsyncioTestCase):
     async def test_add(self):
-        print("init test_add")
-        session = await get_session()
+        # Arrange
+        product_obj = Product(
+            id=_id,
+            name="Product test",
+            description="Product"
+        )
+        created_repository = SqlAlchemyProductsRepository()
+        await  created_repository.create_all()
 
+        # Act
+        result = await created_repository.add(product=product_obj.__dict__)
 
-        # result = await session.execute(text("select 1"))
-        print("create table  product")
-        # current_time = datetime.now(timezone.utc).isoformat()
-        # _id = str(uuid.uuid4())
-        #
-        # product_obj = Product(
-        #     id=_id,
-        #     name="Product test",
-        #     description="Product",
-        #     createDate=current_time,
-        #     lastUpdateDate=current_time,
-        # )
-        # created_repository = SqlAlchemyProductsRepository(session=get_session())
-        #
-        # result = await created_repository.add(product=product_obj)
-        #
-        # assert product_obj.id is None
+        # Assert
+        assert result["created_at"] is not None
+        self.assertEqual(result["id"], uuid.UUID(_id))
+
+    async def test_get(self):
+        logger.critical('Started test_get')
+        # Arrange
+        created_repository = SqlAlchemyProductsRepository()
+
+        # Act
+        result = await created_repository.get(product_id=uuid.UUID(_id))
+
+        # Assert
+        assert result["created_at"] is not None
+        self.assertEqual(result["id"], uuid.UUID(_id))

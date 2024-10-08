@@ -1,34 +1,32 @@
-from os import environ
-
-from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-ENV = environ.get("ENV", None)
-ENV_FILE = {"dev": ".env.dev", "prod": ".env", "test": ".env.test"}
-
-try:
-    env_file = ".env.local" if ENV is None else ENV_FILE[ENV]
-except KeyError:
-    raise ValueError("ENV must be either 'dev', 'prod' or 'test'")
+import pydantic_settings
+from sqlalchemy.engine.url import URL
 
 
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=env_file, extra="ignore")
+class Settings(pydantic_settings.BaseSettings):
+    service_name: str = "FastAPI template"
+    debug: bool = False
 
-    # project
-    VERSION: str = Field("0.0.1")
-    PROJECT_NAME: str = Field(
-        "FastAPI Snippets: Sqlalchemy/Pydantic CRUD Factory Pattern"
-    )
-    # postgres
-    POSTGRES_USER: str = Field("postgres")
-    POSTGRES_DRIVERNAME: str = Field("postgres")
-    POSTGRES_PASSWORD: str = Field("postgres")
-    POSTGRES_DB: str = Field("postgres")
-    POSTGRES_HOST: str = Field("localhost")
-    POSTGRES_PORT: int | str = Field("5432")
-    POSTGRES_ECHO: bool = Field(False)
-    POSTGRES_POOL_SIZE: int = Field(3)
+    db_driver: str = "postgresql+asyncpg"
+    db_host: str = "db"
+    db_port: int = 5432
+    db_user: str = "postgres"
+    db_password: str = "password"
+    db_database: str = "postgres"
 
+    db_pool_size: int = 5
+    db_max_overflow: int = 0
+    db_echo: bool = False
+    db_pool_pre_ping: bool = True
 
-settings = Settings()
+    app_port: int = 8000
+
+    @property
+    def db_dsn(self) -> URL:
+        return URL.create(
+            self.db_driver,
+            self.db_user,
+            self.db_password,
+            self.db_host,
+            self.db_port,
+            self.db_database,
+        )
