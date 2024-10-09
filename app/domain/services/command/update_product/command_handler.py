@@ -1,7 +1,5 @@
-import uuid
 from datetime import datetime, timezone
 
-from app.domain.model.product import Product
 from app.domain.ports.products_repository import ProductsRepository
 from app.domain.services.command.update_product.command import UpdateProductCommand
 
