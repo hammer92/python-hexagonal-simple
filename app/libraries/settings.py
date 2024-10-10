@@ -1,32 +1,27 @@
-import pydantic_settings
-from sqlalchemy.engine.url import URL
+import os
+from pathlib import Path
+
+from pydantic import  Field
+from pydantic_settings import BaseSettings
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) # This is your Project Root
+csv_path = os.path.join(ROOT_DIR,"..","..", '.env.local')
+class Settings(BaseSettings):
+    VERSION: str = Field("0.0.1")
+    PROJECT_NAME: str = Field("Ultimate FastAPI Project Setup")
+    DATABASE_USER: str = Field("postgres")
+    DATABASE_PASSWORD: str = Field("postgres")
+    DATABASE_DB: str = Field("postgres")
+    DATABASE_HOST: str = Field("localhost")
+    DATABASE_DRIVERNAME: str = Field("postgress")
+    DATABASE_PORT: int | str = Field("5432")
+    DATABASE_POOL_SIZE: int = Field(10)
+
+    class Config:
+        case_sensitive = True
+        env_file = csv_path
 
 
-class Settings(pydantic_settings.BaseSettings):
-    service_name: str = "FastAPI template"
-    debug: bool = False
+settings = Settings()
 
-    db_driver: str = "postgresql+asyncpg"
-    db_host: str = "db"
-    db_port: int = 5432
-    db_user: str = "postgres"
-    db_password: str = "password"
-    db_database: str = "postgres"
-
-    db_pool_size: int = 5
-    db_max_overflow: int = 0
-    db_echo: bool = False
-    db_pool_pre_ping: bool = True
-
-    app_port: int = 8000
-
-    @property
-    def db_dsn(self) -> URL:
-        return URL.create(
-            self.db_driver,
-            self.db_user,
-            self.db_password,
-            self.db_host,
-            self.db_port,
-            self.db_database,
-        )
+print(settings)

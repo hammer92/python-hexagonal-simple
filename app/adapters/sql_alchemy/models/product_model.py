@@ -20,4 +20,5 @@ def product_entity_to_model(product:dict) -> ProductModel:
     )
 
 def product_model_to_entity(product:ProductModel) -> dict:
-    return product.__dict__
+    return product.to_dict()
+

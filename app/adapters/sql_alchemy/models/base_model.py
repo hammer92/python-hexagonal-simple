@@ -11,4 +11,6 @@ class TimestampMixin:
     updated_at: Mapped[datetime] = mapped_column(
         TIMESTAMP, server_default=now(), onupdate=now())
 
-class Base(DeclarativeBase):...
+class Base(DeclarativeBase):
+    def to_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}

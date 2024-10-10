@@ -4,12 +4,14 @@ from asyncio import current_task
 from sqlalchemy import URL
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, async_scoped_session, AsyncEngine
 
+from app.libraries.settings import settings
+print("------------", settings)
 database_url = URL.create(
-    drivername="postgresql+asyncpg",
-    database="testuser",
-    username="postgres",
-    password="mysecretpassword",
-    host="localhost",
+    drivername=settings.DATABASE_DRIVERNAME,
+    database=settings.DATABASE_DB,
+    username=settings.DATABASE_USER,
+    password=settings.DATABASE_PASSWORD,
+    host=settings.DATABASE_HOST,
 )
 
 class DatabaseSessionManager:
@@ -24,7 +26,9 @@ class DatabaseSessionManager:
 
         # Creating an asynchronous engine
         self.engine = create_async_engine(
-            database_url, pool_size=10, max_overflow=20, pool_pre_ping=False
+            database_url,
+            pool_size=settings.DATABASE_POOL_SIZE, max_overflow=20,
+            pool_pre_ping=False
         )
 
         # Creating an asynchronous session class
