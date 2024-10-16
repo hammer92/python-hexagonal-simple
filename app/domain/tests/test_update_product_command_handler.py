@@ -4,7 +4,7 @@ from unittest import TestCase, mock
 
 from assertpy import assertpy
 
-from app.domain.ports.products_repository import ProductsRepository
+from app.domain.ports.products_repository import ProductsCommandRepository
 from app.domain.services.command.update_product.command import UpdateProductCommand
 from app.domain.services.command.update_product.command_handler import handle_update_product_command
 
@@ -12,7 +12,7 @@ from app.domain.services.command.update_product.command_handler import handle_up
 class TestUpdateProduct(TestCase):
     async def test_handle_update_product_command(self):
         mock_products_repository = mock.create_autospec(
-            spec=ProductsRepository, instance=True
+            spec=ProductsCommandRepository, instance=True
         )
 
         # Update only the description

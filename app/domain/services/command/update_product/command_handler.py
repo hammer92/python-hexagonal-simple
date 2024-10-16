@@ -1,11 +1,11 @@
 from datetime import datetime, timezone
 
-from app.domain.ports.products_repository import ProductsRepository
+from app.domain.ports.products_repository import ProductsCommandRepository
 from app.domain.services.command.update_product.command import UpdateProductCommand
 
 
 async def handle_update_product_command(command: UpdateProductCommand,
-                                  products_repository: ProductsRepository) -> str:
+                                  products_repository: ProductsCommandRepository) -> str:
     current_time = datetime.now(timezone.utc).isoformat()
 
     attr_to_update = {
