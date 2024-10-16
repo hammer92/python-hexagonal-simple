@@ -1,11 +1,11 @@
 import os
-from pathlib import Path
 
 from pydantic import  Field
 from pydantic_settings import BaseSettings
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) # This is your Project Root
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(ROOT_DIR,"..","..", '.env.local')
+
 class Settings(BaseSettings):
     VERSION: str = Field("0.0.1")
     PROJECT_NAME: str = Field("Ultimate FastAPI Project Setup")
@@ -23,5 +23,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-
-print(settings)
